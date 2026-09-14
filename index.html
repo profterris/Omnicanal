@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercices – Intégrer l'omnicanal dans le processus de vente</title>
+<style>
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0f1117;
+  --surface:   #181b24;
+  --card:      #1e2130;
+  --border:    #2a2e3f;
+  --border-hi: #3a3f5a;
+  --text:      #d8dce8;
+  --text-dim:  #7a7f96;
+  --accent:    #f5c431;
+  --green:     #3ecf6a;
+  --red:       #f05252;
+  --blue:      #4d9de0;
+  --purple:    #9b72cf;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --radius:    10px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── HEADER ──────────────────────────────────────────────── */
+.site-header {
+  background: linear-gradient(135deg, #13161f 0%, #1a1e2e 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 48px 24px 36px;
+  text-align: center;
+}
+.site-header .kicker {
+  display: inline-block;
+  background: var(--accent);
+  color: #0f1117;
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 3px;
+  margin-bottom: 18px;
+}
+.site-header h1 {
+  font-family: var(--font-head);
+  font-size: clamp(22px, 5vw, 38px);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+.site-header .sub {
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 300;
+  max-width: 520px;
+  margin: 0 auto 24px;
+}
+
+/* ── NAV ANCRES ──────────────────────────────────────────── */
+.nav-anchors {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.nav-anchors a {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 16px;
+  text-decoration: none;
+  transition: border-color .15s, color .15s;
+}
+.nav-anchors a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── CONTENEUR PRINCIPAL ─────────────────────────────────── */
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* ── TITRE DE BLOC ───────────────────────────────────────── */
+.bloc-titre {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 52px 0 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.bloc-titre:first-child { margin-top: 0; }
+.bloc-titre .icone {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.bloc-titre h2 {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* ── MÉMO ────────────────────────────────────────── */
+.memo {
+  background: #0d1a0d;
+  border: 1px solid #1e3b1e;
+  border-left: 4px solid var(--green);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+.memo .memo-titre {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+.memo code {
+  display: block;
+  background: #0a130a;
+  border-radius: 5px;
+  padding: 8px 14px;
+  color: #7ddf8a;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  margin: 4px 0;
+}
+.memo .note {
+  color: var(--text-dim);
+  font-size: 12.5px;
+  margin-top: 6px;
+}
+
+/* ── CARTE EXERCICE ──────────────────────────────────────── */
+.exo-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.exo-card:hover { border-color: var(--border-hi); }
+
+.exo-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+.exo-header::-webkit-details-marker { display: none; }
+
+.exo-num {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-width: 40px;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.badge-1 { background: #0d2a0d; color: var(--green); border: 1px solid #1e4a1e; }
+.badge-2 { background: #1a1a00; color: var(--accent); border: 1px solid #3a3a00; }
+.badge-3 { background: #2a0d0d; color: var(--red); border: 1px solid #4a1a1a; }
+.badge-exam { background: #1a0d2a; color: var(--purple); border: 1px solid #3a1a4a; }
+
+.exo-titre-txt {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1;
+}
+.chevron {
+  color: var(--text-dim);
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+details[open] .chevron { transform: rotate(180deg); }
+
+/* ── CORPS DE L'EXERCICE ─────────────────────────────────── */
+.exo-body {
+  padding: 0 18px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.contexte {
+  background: #14172a;
+  border-left: 3px solid var(--blue);
+  border-radius: 0 6px 6px 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.contexte strong { color: #fff; }
+
+.tableau-donnees {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 12px 0;
+}
+.tableau-donnees th {
+  background: #1a1d2e;
+  color: var(--text-dim);
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.tableau-donnees td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.tableau-donnees tr:last-child td { border-bottom: none; }
+.tableau-donnees td.num { font-weight: 600; color: #fff; }
+.tableau-donnees tr.total-row td {
+  background: #1a1d2e;
+  font-family: var(--font-head);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.questions { margin: 18px 0 0; }
+.question {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+.question .q-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  color: #0f1117;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 11px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+.question p { font-size: 14px; margin: 0; }
+
+/* ── POINT DE REPÈRE ───────────────────────────────────── */
+.ordre-grandeur {
+  background: #1a1700;
+  border: 1px solid #3a3200;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: #c8b840;
+  margin: 12px 0 0;
+}
+.ordre-grandeur::before { content: "💡 "; }
+
+/* ── BOUTON CORRECTION ───────────────────────────────────── */
+.btn-corrige {
+  background: none;
+  border: 1px solid var(--border-hi);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  margin-top: 18px;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-corrige:hover { border-color: var(--green); color: var(--green); }
+
+/* ── CORRECTION ──────────────────────────────────────────── */
+.correction {
+  display: none;
+  background: #0d1a0d;
+  border: 1px solid #1e3b1e;
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin-top: 14px;
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+.correction.visible { display: block; }
+.correction .corr-etape {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1a2e1a;
+}
+.correction .corr-etape:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.correction .c-num {
+  display: inline-block;
+  background: var(--green);
+  color: #0d1a0d;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 18px;
+  margin-right: 6px;
+}
+.correction code {
+  display: block;
+  background: #0a130a;
+  border-radius: 4px;
+  padding: 6px 12px;
+  color: #7ddf8a;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  margin: 5px 0;
+}
+.correction .res {
+  font-family: var(--font-head);
+  font-weight: 700;
+  color: #fff;
+}
+.correction .conclu {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #a0c8a0;
+  font-style: italic;
+}
+.correction .tableau-corr {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin: 8px 0;
+}
+.correction .tableau-corr th {
+  background: #0a1a0a;
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  text-align: left;
+}
+.correction .tableau-corr td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #1a2e1a;
+  color: #9ac09a;
+}
+.correction .tableau-corr td.val {
+  font-weight: 700;
+  color: var(--green);
+}
+.correction .tableau-corr tr.t-total td {
+  background: #0a1a0a;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ── SÉPARATEUR ──────────────────────────────────────────── */
+hr.section-sep {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 54px 0 0;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .exo-titre-txt { font-size: 13px; }
+  .contexte { font-size: 13px; }
+  .tableau-donnees { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="kicker">🔄 Exercices – Bac pro MCV</div>
+  <h1>Intégrer l'omnicanal<br>dans le processus de vente</h1>
+  <p class="sub">14 exercices progressifs – des méthodes de vente aux stratégies omnicanales</p>
+  <nav class="nav-anchors">
+    <a href="#methodes">🛍️ Méthodes de vente (4 ex.)</a>
+    <a href="#canaux">🔗 Canaux de distribution (4 ex.)</a>
+    <a href="#strategies">🌐 Stratégies &amp; outils digitaux (4 ex.)</a>
+    <a href="#complet">🏁 Sujets complets (2 ex.)</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOC 1 – MÉTHODES DE VENTE
+══════════════════════════════════════════════════════════ -->
+<div class="bloc-titre" id="methodes">
+  <span class="icone">🛍️</span>
+  <h2>Bloc 1 – Distinguer les méthodes de vente</h2>
+</div>
+
+<div class="memo">
+  <div class="memo-titre">🗂 mémo notions clés</div>
+  <code>Vente de contact&nbsp;: le client passe par un vendeur qui le renseigne et le conseille (magasin, salon, téléphone, représentant).</code>
+  <code>Vente visuelle&nbsp;: le client choisit seul son produit ou se fait aider ponctuellement par un vendeur (libre-service, libre-service assisté, distributeur automatique).</code>
+  <code>Vente à distance&nbsp;: le client achète seul, sans contact direct ni avec le vendeur ni avec le produit (e-commerce, drive, téléachat, click &amp; collect).</code>
+</div>
+
+<!-- EX 1 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;1</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Reconnaître une méthode de vente</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      Léa entre dans un magasin de sport. Une vendeuse l'accueille, l'interroge sur son niveau de pratique et lui recommande un modèle de chaussures adapté à sa foulée.
+    </div>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Quelle méthode de vente est mise en œuvre ici&nbsp;? Justifiez en une phrase.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p class="res">Vente de contact</p>
+        <p class="conclu">Le client passe par une vendeuse qui le renseigne et le conseille directement&nbsp;: il y a interaction humaine tout au long de l'échange.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- EX 2 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;2</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Vrai ou faux – les trois méthodes de vente</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">a</span>
+        <p>Le libre-service assisté est une forme de vente à distance.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">b</span>
+        <p>Le click &amp; collect est une forme de vente à distance.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">c</span>
+        <p>Dans la vente visuelle, le client peut être aidé ponctuellement par un vendeur.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">d</span>
+        <p>Le téléachat suppose un contact direct avec le produit avant l'achat.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">a</span>
+        <p class="res">Faux</p>
+        <p class="conclu">Le libre-service assisté relève de la vente visuelle&nbsp;: le client choisit seul, avec une aide ponctuelle possible.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">b</span>
+        <p class="res">Vrai</p>
+        <p class="conclu">Le click &amp; collect fait partie de la vente à distance&nbsp;: la commande se fait sans contact direct avec le vendeur.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">c</span>
+        <p class="res">Vrai</p>
+        <p class="conclu">C'est la définition même de la vente visuelle en libre-service assisté.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">d</span>
+        <p class="res">Faux</p>
+        <p class="conclu">Dans la vente à distance, il n'y a aucun contact direct ni avec le vendeur ni avec le produit avant l'achat.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- EX 3 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;3</span>
+    <span class="badge badge-2">➤ intermédiaire</span>
+    <span class="exo-titre-txt">Classer des exemples par méthode de vente</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      Classez chaque situation dans la bonne méthode de vente&nbsp;: vente de contact, vente visuelle ou vente à distance.
+    </div>
+    <table class="tableau-donnees">
+      <tr><th>Situation</th><th>Méthode de vente</th></tr>
+      <tr><td class="num">1</td><td>Achat en boutique avec les conseils d'un vendeur</td></tr>
+      <tr><td class="num">2</td><td>Distributeur automatique de boissons</td></tr>
+      <tr><td class="num">3</td><td>Achat sur un site internet, livraison à domicile</td></tr>
+      <tr><td class="num">4</td><td>Salon professionnel, échange avec un représentant</td></tr>
+      <tr><td class="num">5</td><td>Rayon en libre-service, vendeur disponible sur demande</td></tr>
+      <tr><td class="num">6</td><td>Commande passée par téléphone auprès d'un téléopérateur</td></tr>
+    </table>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Complétez la colonne « méthode de vente » pour les six situations.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <table class="tableau-corr">
+        <tr><th>Situation</th><th>Méthode de vente</th></tr>
+        <tr><td>1</td><td class="val">Vente de contact</td></tr>
+        <tr><td>2</td><td class="val">Vente visuelle</td></tr>
+        <tr><td>3</td><td class="val">Vente à distance</td></tr>
+        <tr><td>4</td><td class="val">Vente de contact</td></tr>
+        <tr><td>5</td><td class="val">Vente visuelle</td></tr>
+        <tr><td>6</td><td class="val">Vente de contact</td></tr>
+      </table>
+      <p class="conclu">Le critère de classement est la présence ou non d'un vendeur qui renseigne et conseille le client, et la présence ou non d'un contact avec le produit.</p>
+    </div>
+  </div>
+</details>
+
+<!-- EX 4 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;4</span>
+    <span class="badge badge-2">➤ intermédiaire</span>
+    <span class="exo-titre-txt">Cas pratique – un parcours d'achat mixte</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      Un client souhaite acheter un aspirateur. Il consulte d'abord un comparateur de prix en ligne, sans aucune intervention humaine. Il se rend ensuite en magasin, où un vendeur répond à ses questions techniques. Il repart finalement sans acheter et commande le produit en click &amp; collect depuis le site de l'enseigne.
+    </div>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Identifiez la méthode de vente mobilisée à chaque étape du parcours.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">2</span>
+        <p>Ce parcours relève-t-il d'une méthode de vente unique ou de plusieurs méthodes combinées&nbsp;? Justifiez.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p><strong>Étape 1 (comparateur en ligne)</strong>&nbsp;: vente à distance.</p>
+        <p><strong>Étape 2 (magasin, conseil du vendeur)</strong>&nbsp;: vente de contact.</p>
+        <p><strong>Étape 3 (click &amp; collect)</strong>&nbsp;: vente à distance.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">2</span>
+        <p class="res">Plusieurs méthodes combinées</p>
+        <p class="conclu">Le client passe successivement par la vente à distance et la vente de contact&nbsp;: ce type de parcours, qui mêle plusieurs canaux, annonce la logique omnicanale étudiée dans les blocs suivants.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOC 2 – CANAUX DE DISTRIBUTION
+══════════════════════════════════════════════════════════ -->
+<div class="bloc-titre" id="canaux">
+  <span class="icone">🔗</span>
+  <h2>Bloc 2 – Identifier le circuit et les canaux de distribution</h2>
+</div>
+
+<div class="memo">
+  <div class="memo-titre">🗂 mémo notions clés</div>
+  <code>Canal de distribution&nbsp;: chemin suivi par un produit, du producteur au consommateur, avec les intermédiaires éventuels.</code>
+  <code>Canal direct = 0 intermédiaire   |   canal court = 1 intermédiaire   |   canal long = au moins 2 intermédiaires</code>
+  <p class="note">Le circuit de distribution est l'ensemble des canaux utilisés par une entreprise pour commercialiser un produit. Grossistes et centrales d'achat sont des intermédiaires typiques du canal long.</p>
+</div>
+
+<!-- EX 5 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;5</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Vrai ou faux – canaux de distribution</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">a</span>
+        <p>Le canal de distribution est le chemin parcouru par un produit du producteur au consommateur.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">b</span>
+        <p>Le canal direct compte un intermédiaire.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">c</span>
+        <p>Le canal long compte au moins deux intermédiaires.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">d</span>
+        <p>Une centrale d'achat intervient dans un canal court.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">e</span>
+        <p>Le canal court permet au client de mieux maîtriser l'origine des produits que le canal long.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">a</span><p class="res">Vrai</p></div>
+      <div class="corr-etape"><span class="c-num">b</span><p class="res">Faux</p><p class="conclu">Le canal direct ne compte aucun intermédiaire&nbsp;: le producteur vend directement au consommateur.</p></div>
+      <div class="corr-etape"><span class="c-num">c</span><p class="res">Vrai</p></div>
+      <div class="corr-etape"><span class="c-num">d</span><p class="res">Faux</p><p class="conclu">Une centrale d'achat est un intermédiaire caractéristique du canal long.</p></div>
+      <div class="corr-etape"><span class="c-num">e</span><p class="res">Vrai</p><p class="conclu">Moins il y a d'intermédiaires, plus le client peut remonter facilement à l'origine du produit.</p></div>
+    </div>
+  </div>
+</details>
+
+<!-- EX 6 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;6</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">QCM – le rôle de la centrale d'achat</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Une centrale d'achat…<br>
+        a) vend directement aux consommateurs finaux.<br>
+        b) achète en grande quantité aux producteurs pour négocier les prix au bénéfice de ses enseignes.<br>
+        c) constitue à elle seule un canal direct.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p class="res">Réponse b</p>
+        <p class="conclu">La centrale d'achat regroupe les commandes de plusieurs enseignes pour obtenir de meilleures conditions tarifaires auprès des producteurs&nbsp;; elle ne vend pas directement au consommateur final.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- EX 7 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;7</span>
+    <span class="badge badge-2">➤ intermédiaire</span>
+    <span class="exo-titre-txt">Compléter le tableau des canaux</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      Complétez le tableau en indiquant, pour chaque canal, le nombre d'intermédiaires et un exemple d'intermédiaire possible.
+    </div>
+    <table class="tableau-donnees">
+      <tr><th>Canal</th><th>Nombre d'intermédiaires</th><th>Exemple d'intermédiaire</th></tr>
+      <tr><td class="num">Direct</td><td>?</td><td>?</td></tr>
+      <tr><td class="num">Court</td><td>?</td><td>?</td></tr>
+      <tr><td class="num">Long</td><td>?</td><td>?</td></tr>
+    </table>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <table class="tableau-corr">
+        <tr><th>Canal</th><th>Nombre d'intermédiaires</th><th>Exemple d'intermédiaire</th></tr>
+        <tr><td>Direct</td><td class="val">0</td><td>aucun (vente directe du producteur)</td></tr>
+        <tr><td>Court</td><td class="val">1</td><td>un détaillant / une enseigne</td></tr>
+        <tr><td>Long</td><td class="val">2 ou plus</td><td>un grossiste et/ou une centrale d'achat, puis un détaillant</td></tr>
+      </table>
+    </div>
+  </div>
+</details>
+
+<!-- EX 8 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;8</span>
+    <span class="badge badge-3">★ approfondissement</span>
+    <span class="exo-titre-txt">Cas d'entreprise – choisir un canal</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      L'enseigne <em>BioNaturel</em> vend des cosmétiques fabriqués par de petits producteurs locaux. Elle achète directement auprès de ces producteurs, sans passer par un grossiste ni par une centrale d'achat, puis revend les produits dans ses magasins.
+    </div>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Quel type de canal de distribution utilise BioNaturel&nbsp;? Justifiez.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">2</span>
+        <p>Quel avantage ce choix procure-t-il aux clients&nbsp;?</p>
+      </div>
+      <div class="question">
+        <span class="q-num">3</span>
+        <p>Quelle serait la conséquence si BioNaturel passait par une centrale d'achat&nbsp;?</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p class="res">Canal court</p>
+        <p class="conclu">Il n'y a qu'un seul intermédiaire entre le producteur et le consommateur final&nbsp;: l'enseigne BioNaturel elle-même.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">2</span>
+        <p class="res">Une meilleure maîtrise de l'origine et de la traçabilité des produits, souvent associée à une plus grande réactivité de l'enseigne.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">3</span>
+        <p class="res">Le canal deviendrait un canal long</p>
+        <p class="conclu">Un intermédiaire supplémentaire s'ajouterait&nbsp;: BioNaturel pourrait négocier de meilleurs prix sur de gros volumes, mais perdrait en contact direct avec les producteurs et en traçabilité.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOC 3 – STRATÉGIES DE PARCOURS CLIENT & OUTILS DIGITAUX
+══════════════════════════════════════════════════════════ -->
+<div class="bloc-titre" id="strategies">
+  <span class="icone">🌐</span>
+  <h2>Bloc 3 – Choisir une stratégie de parcours client et des outils digitaux</h2>
+</div>
+
+<div class="memo">
+  <div class="memo-titre">🗂 mémo notions clés</div>
+  <code>Multicanal&nbsp;: plusieurs canaux de vente proposés, mais indépendants les uns des autres.</code>
+  <code>Cross-canal&nbsp;: complémentarité organisée entre les canaux (ex. : achat en ligne, retrait en magasin).</code>
+  <code>Omnicanal&nbsp;: interconnexion totale des canaux pour une expérience d'achat fluide et unifiée.</code>
+  <p class="note">Les outils digitaux (ordinateur, tablette, borne interactive, smartphone) soutiennent cette interconnexion tout au long du processus de vente.</p>
+</div>
+
+<!-- EX 9 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;9</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Vrai ou faux – parcours client et outils digitaux</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">a</span>
+        <p>Un client qui consulte les avis produits sur le site internet d'une enseigne avant d'aller l'acheter en magasin illustre la pratique du web-to-store.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">b</span>
+        <p>Le smartphone ne peut être utilisé par le client qu'en dehors du point de vente.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">c</span>
+        <p>Une borne interactive en magasin peut être utilisée aussi bien par le vendeur que par le client.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">d</span>
+        <p>Une stratégie omnicanale se limite à ouvrir un site internet en plus du magasin physique.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">a</span><p class="res">Vrai</p></div>
+      <div class="corr-etape"><span class="c-num">b</span><p class="res">Faux</p><p class="conclu">Le client peut aussi utiliser son smartphone en magasin&nbsp;: scan de code-barres, comparaison de prix, consultation d'avis.</p></div>
+      <div class="corr-etape"><span class="c-num">c</span><p class="res">Vrai</p></div>
+      <div class="corr-etape"><span class="c-num">d</span><p class="res">Faux</p><p class="conclu">L'omnicanal suppose une interconnexion réelle entre les canaux (stocks, données client, fidélité), pas seulement leur coexistence.</p></div>
+    </div>
+  </div>
+</details>
+
+<!-- EX 10 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;10</span>
+    <span class="badge badge-2">➤ intermédiaire</span>
+    <span class="exo-titre-txt">Associer trois enseignes à leur stratégie</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      <strong>Enseigne A</strong>&nbsp;: vend en magasin et sur un site internet totalement indépendant (stocks, prix et fidélité différents).<br><br>
+      <strong>Enseigne B</strong>&nbsp;: permet de commander en ligne et de retirer en magasin, avec un stock unique visible sur les deux canaux.<br><br>
+      <strong>Enseigne C</strong>&nbsp;: le vendeur en magasin consulte en temps réel l'historique d'achat en ligne du client sur une tablette et peut proposer une livraison à domicile si l'article n'est pas en rayon.
+    </div>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Associez chaque enseigne à sa stratégie&nbsp;: multicanale, cross-canale ou omnicanale.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">2</span>
+        <p>Justifiez votre réponse pour l'enseigne C.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p><strong>Enseigne A</strong> → multicanale <strong>Enseigne B</strong> → cross-canale <strong>Enseigne C</strong> → omnicanale</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">2</span>
+        <p class="conclu">Les canaux sont pleinement interconnectés&nbsp;: les données du client sont partagées en temps réel entre le en ligne et le magasin, et la rupture de stock en rayon est compensée par la livraison, ce qui crée une expérience d'achat continue.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- EX 11 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;11</span>
+    <span class="badge badge-2">➤ intermédiaire</span>
+    <span class="exo-titre-txt">Associer un outil digital à sa fonction</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      Pour chaque outil digital, indiquez sa fonction principale dans le processus de vente.
+    </div>
+    <table class="tableau-donnees">
+      <tr><th>Outil digital</th><th>Fonction (à compléter)</th></tr>
+      <tr><td class="num">Ordinateur</td><td>?</td></tr>
+      <tr><td class="num">Tablette tactile</td><td>?</td></tr>
+      <tr><td class="num">Borne interactive</td><td>?</td></tr>
+      <tr><td class="num">Smartphone</td><td>?</td></tr>
+    </table>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <table class="tableau-corr">
+        <tr><th>Outil digital</th><th>Fonction principale</th></tr>
+        <tr><td>Ordinateur</td><td class="val">gestion des stocks, consultation des fiches produit, encaissement fixe</td></tr>
+        <tr><td>Tablette tactile</td><td class="val">mobilité du vendeur en rayon, consultation client, encaissement mobile</td></tr>
+        <tr><td>Borne interactive</td><td class="val">consultation autonome du catalogue et du stock, par le client comme par le vendeur</td></tr>
+        <tr><td>Smartphone</td><td class="val">prise de contact, géolocalisation, paiement mobile, retrait en click &amp; collect</td></tr>
+      </table>
+    </div>
+  </div>
+</details>
+
+<!-- EX 12 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;12</span>
+    <span class="badge badge-3">★ approfondissement</span>
+    <span class="exo-titre-txt">Cas d'entreprise – faire évoluer une stratégie</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      L'enseigne <em>Cyclo Passion</em> (magasins de vélos) possède cinq magasins et un site internet, mais les deux canaux fonctionnent de façon totalement séparée&nbsp;: stocks différents, programme de fidélité réservé au magasin, service après-vente disponible uniquement en ligne.
+    </div>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Quelle stratégie de parcours client est actuellement utilisée par Cyclo Passion&nbsp;?</p>
+      </div>
+      <div class="question">
+        <span class="q-num">2</span>
+        <p>Proposez deux actions concrètes pour faire évoluer Cyclo Passion vers une stratégie omnicanale.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">3</span>
+        <p>Quel outil digital pourrait accompagner cette évolution en magasin&nbsp;?</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p class="res">Stratégie multicanale</p>
+        <p class="conclu">Les canaux existent mais restent juxtaposés, sans partage d'information entre eux.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">2</span>
+        <p>Exemples&nbsp;: unifier le stock (visible en ligne et en magasin) et permettre un click &amp; collect&nbsp;; étendre le programme de fidélité et le service après-vente aux deux canaux.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">3</span>
+        <p class="res">Tablette tactile ou borne interactive en magasin</p>
+        <p class="conclu">Ces outils permettent au vendeur de consulter le stock global du réseau et l'historique du client, quel que soit le canal d'origine.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOC 4 – SUJETS COMPLETS
+══════════════════════════════════════════════════════════ -->
+<div class="bloc-titre" id="complet">
+  <span class="icone">🏁</span>
+  <h2>Bloc 4 – Sujets complets</h2>
+</div>
+
+<!-- EX 13 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;13</span>
+    <span class="badge badge-exam">🏁 sujet complet</span>
+    <span class="exo-titre-txt">Parcours client, canal et stratégie combinés</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      <em>Sportissimo</em> est une enseigne d'articles de sport. Un client type consulte d'abord le site internet de l'enseigne pour comparer les prix et lire les avis, sans aucun contact humain. Il se rend ensuite en magasin, où un conseiller l'aide à choisir la bonne pointure de chaussures de running. Il finalise son achat sur une borne interactive du magasin, qui lui permet de commander une taille absente du rayon, livrée à domicile. Sportissimo achète par ailleurs ses chaussures directement aux fabricants, sans intermédiaire supplémentaire.
+    </div>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Identifiez la méthode de vente mobilisée à chaque étape du parcours.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">2</span>
+        <p>Quel type de canal de distribution utilise Sportissimo pour s'approvisionner&nbsp;?</p>
+      </div>
+      <div class="question">
+        <span class="q-num">3</span>
+        <p>Quelle stratégie de parcours client est mise en œuvre&nbsp;? Justifiez à partir du texte.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">4</span>
+        <p>Quel outil digital assure la fluidité de ce parcours&nbsp;? Expliquez son rôle.</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction complète</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p><strong>Étape 1 (site, comparaison)</strong>&nbsp;: vente à distance. <strong>Étape 2 (conseiller en magasin)</strong>&nbsp;: vente de contact. <strong>Étape 3 (borne + livraison)</strong>&nbsp;: vente à distance.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">2</span>
+        <p class="res">Canal court</p>
+        <p class="conclu">Un seul intermédiaire sépare le fabricant du consommateur&nbsp;: Sportissimo elle-même.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">3</span>
+        <p class="res">Stratégie omnicanale</p>
+        <p class="conclu">Les canaux (site, magasin, borne) sont interconnectés&nbsp;: le stock manquant en rayon est complété par une commande en ligne initiée depuis le magasin, ce qui garantit la continuité du parcours d'achat.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">4</span>
+        <p class="res">La borne interactive</p>
+        <p class="conclu">Elle permet au client de consulter l'ensemble du catalogue et de commander un produit indisponible en rayon, assurant la continuité entre le magasin physique et l'offre en ligne.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- EX 14 -->
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex.&nbsp;14</span>
+    <span class="badge badge-exam">🏁 sujet complet</span>
+    <span class="exo-titre-txt">Diagnostic et note structurée au responsable</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">
+      Vous êtes conseiller(ère) commercial(e) chez <em>Lumina Déco</em>, enseigne de décoration d'intérieur (magasins et site internet). Votre responsable constate que 40&nbsp;% des clients qui consultent le site se déplacent ensuite en magasin, sans que les vendeurs n'aient accès à leur historique de navigation. Les stocks du site et des magasins sont gérés séparément, et le programme de fidélité n'existe qu'en magasin.
+    </div>
+    <div class="questions">
+      <div class="question">
+        <span class="q-num">1</span>
+        <p>Caractérisez la stratégie actuelle de Lumina Déco (méthodes de vente, stratégie de parcours client).</p>
+      </div>
+      <div class="question">
+        <span class="q-num">2</span>
+        <p>Identifiez les limites de cette organisation pour le client comme pour l'enseigne.</p>
+      </div>
+      <div class="question">
+        <span class="q-num">3</span>
+        <p>Rédigez une note structurée à votre responsable proposant une évolution vers une stratégie omnicanale (au moins trois actions, dont un outil digital).</p>
+      </div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction complète</button>
+    <div class="correction">
+      <div class="corr-etape">
+        <span class="c-num">1</span>
+        <p><strong>Méthodes de vente</strong>&nbsp;: vente à distance sur le site, vente de contact en magasin.<br><strong>Stratégie actuelle</strong>&nbsp;: multicanale — les canaux coexistent mais ne partagent aucune donnée.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">2</span>
+        <p class="res">Le client doit répéter ses recherches en magasin, le vendeur ne peut pas personnaliser le conseil, le programme de fidélité pénalise les clients en ligne, et le risque de rupture de stock n'est pas anticipé entre les canaux.</p>
+      </div>
+      <div class="corr-etape">
+        <span class="c-num">3</span>
+        <p style="font-style:italic;color:#8ab88a;font-size:13px;line-height:1.9;border:1px solid #1e3b1e;padding:14px;border-radius:5px;">
+          <strong>NOTE DE SERVICE</strong><br><br>
+          <strong>À&nbsp;:</strong> la direction commerciale<br>
+          <strong>De&nbsp;:</strong> [Prénom Nom], conseiller(ère) commercial(e)<br>
+          <strong>Objet&nbsp;:</strong> évolution vers une stratégie omnicanale<br><br>
+          Notre organisation actuelle juxtapose le site internet et les magasins sans les connecter, ce qui limite la qualité du parcours client.<br><br>
+          Je propose trois actions&nbsp;: unifier le stock afin qu'il soit visible sur les deux canaux&nbsp;; équiper les vendeurs de tablettes tactiles pour consulter l'historique de navigation du client en magasin&nbsp;; étendre le programme de fidélité au site internet.<br><br>
+          Ces actions créeraient une interconnexion réelle entre nos canaux et une expérience d'achat unifiée pour le client.
+        </p>
+      </div>
+    </div>
+  </div>
+</details>
+
+</main>
+
+<footer class="site-footer">
+  Bac pro MCV &nbsp;|&nbsp; 14 exercices progressifs – Intégrer l'omnicanal dans le processus de vente
+</footer>
+
+<script>
+function toggleCorr(btn) {
+  const corr = btn.nextElementSibling;
+  const isVisible = corr.classList.contains('visible');
+  corr.classList.toggle('visible', !isVisible);
+  btn.textContent = isVisible ? '✅ Voir la correction' : '🔒 Masquer la correction';
+}
+</script>
+
+</body>
+</html>
